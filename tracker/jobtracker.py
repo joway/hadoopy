@@ -9,13 +9,15 @@ class JobTracker(object):
         self.jobs_queue = []
         self.loop = asyncio.get_event_loop()
 
+    def __del__(self):
+        self.loop.close()
+
     def submit(self, job):
         self.jobs_queue.append(job)
 
-        self.dispatch()
+        self.dispatch(self.jobs_queue.pop())
 
-    def dispatch(self):
-        job = self.jobs_queue.pop()
+    def dispatch(self, job):
         map_tasks = []
         for split in job.input_splits:
             map_task = MapTask(uuid=gen_random_id(), input_split=split,
@@ -35,8 +37,6 @@ class JobTracker(object):
             reduce_tasks.append(reduce_task.exec_reduce())
 
         self.async_exec(tasks=reduce_tasks)
-
-        self.loop.close()
 
         job.finish()
 

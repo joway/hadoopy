@@ -15,4 +15,4 @@ class Job(object):
     def finish(self):
         with open('output.txt', 'w') as file:
             for i in self.context.data():
-                file.write(str(i[0]) + ' ' + str(i[1]) + '\n')
+                print(str(i[0]), str(i[1]), file=file)

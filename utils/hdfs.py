@@ -1,7 +1,7 @@
 import os
 
 
-def split_with_block(filenames: list, block_size=16):
+def split_with_block(filenames: list, block_size=16*1024):
     splits = []
     for filename in filenames:
         FILE_SIZE = os.path.getsize(filename)
